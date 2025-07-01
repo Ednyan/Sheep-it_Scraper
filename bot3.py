@@ -17,7 +17,6 @@ def scrape_team_data(username, password, progress_callback=None):
     update_progress("Opening login page", 0)
     login_url = "https://www.sheepit-renderfarm.com/user/authenticate"
     team_url = "https://www.sheepit-renderfarm.com/team/2109"
-    time.sleep(1)
     update_progress("Login page loaded", 10)
     # If there is a CSRF token, extract it here (not present on SheepIt as of July 2025)
     payload = {
@@ -36,9 +35,9 @@ def scrape_team_data(username, password, progress_callback=None):
             raise Exception("Login failed: check your username and password.")
         soup = BeautifulSoup(r.content, "html.parser")
         update_progress("Login successful", 30)
-        time.sleep(1)
+
         update_progress("Searching for Team Data", 50)
-        time.sleep(1)
+
         table = soup.find("table")
         if not table:
             update_progress("Failed to find team table", 100)
@@ -71,7 +70,7 @@ def scrape_team_data(username, password, progress_callback=None):
             })
 
         update_progress("Extract successful", 80)
-        time.sleep(1)
+
 
         # Step 6: Save to CSV
         now = datetime.now()
@@ -86,11 +85,8 @@ def scrape_team_data(username, password, progress_callback=None):
             for entry in team_data:
                 writer.writerow([now.date(), entry["rank"], entry["member"], entry["points"], entry["joined_date"], entry["color"]])
 
-        time.sleep(1)
+
         latest_file = os.path.abspath(csv_filename)
         latest_date_fmt = now.strftime("%B %d, %Y")
         if progress_callback:
             progress_callback("Data saved successfully!", 100, latest_date_fmt, latest_file)
-
-        update_progress("", 0)
-        time.sleep(1)
