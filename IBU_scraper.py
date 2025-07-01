@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, jsonify, Response
-from bot import scrape_team_data
+from bot3 import scrape_team_data
+from utils import name_to_color
 from datetime import datetime, timedelta
-from bot import scrape_team_data
 import pandas as pd
 import os
 import hashlib
