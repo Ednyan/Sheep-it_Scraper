@@ -329,6 +329,6 @@ def progress_stream():
             yield f"data: {message}\n\n"
     return Response(event_stream(), mimetype="text/event-stream")
 
-if __name__ == '__main__':
-    threading.Timer(1.0, open_browser).start()
-    app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
