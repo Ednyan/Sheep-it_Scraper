@@ -1,0 +1,161 @@
+.flex-container {
+  display: flex;
+  width: auto;
+  margin: 1vw;
+}
+.left {
+  flex: 1;
+  gap: 50px;
+  padding: 10px;
+  margin-left: 0.5vw;
+  margin-right: 0.5vw;
+  border: 5px solid #3a3a3a;
+  border-radius: 20px;
+}
+.right {
+
+  flex: 12;
+  padding: 10px;
+  border: 5px solid #3a3a3a;
+  border-radius: 20px;
+  margin-left: 0.5vw;
+  margin-right: 0.5vw;
+}
+.list{
+  display: grid;
+  width: 100%;
+}
+.modern-button {
+  background-color: #111;              /* Dark, modern base */
+  color: #fff;                         /* White text */                /* Spacing */
+  border: 2px solid #444;             /* Subtle border */
+  border-radius: 5px;                /* Rounded corners */
+  font-size: 2vw;                    /* Readable size */
+  font-family: 'Inter', sans-serif;   /* Modern font */
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align:center;   /* Smooth hover */
+  margin-top: 2vw;
+}
+
+.modern-button:hover {
+  background-color: #e06150;
+  border-color: #666;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modern-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+#pointsPieChart.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+#pointsPieChart.fade-in {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+}
+
+#data_button{
+  align-content: center;
+  text-align: center;
+  margin-top: 1vw;
+}
+
+#loginForm{
+
+  color:white;
+  font-family:'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  text-align:center;
+  width: 20vw;
+  padding: 1vw;
+  margin: auto;
+  border-radius: 20px;
+}
+
+#output{
+  font-size: 1.5vw;                    /* Readable size */
+  font-family: 'Inter', sans-serif;   /* Modern font */
+  letter-spacing: 0.5px;
+}
+
+.label{
+  color: white;
+  font-family: 'Inter', sans-serif;
+  text-align:center;
+  font-size: 1.5vw;                    /* Readable size */
+  letter-spacing: 0.5px;
+}
+
+.input{
+  font-size: 1.5vw;                    /* Readable size */
+  font-family: 'Inter', sans-serif;   /* Modern font */
+  letter-spacing: 0.5px;
+  width: 15vw;
+  margin-left: 1vw;
+  margin-top: 1vw;
+}
+
+.center {
+  margin: auto;
+  width: 10%;
+  padding: 10px;
+  align-content: center;
+  display: block;
+}
+
+.progress-bar {
+  color:#000!important;
+  background-color:#f1f1f1!important;
+  height: 3vh; /* Height of the progress bar */
+  border-radius: 20px; /* Rounded corners */
+  overflow: hidden; /* Hide overflow for rounded corners */
+}
+
+.progress-bar-fill {
+  background-color: #4caf50; /* Green */
+  height: 100%;
+  width: 0; /* Start at 0% width */
+  transition: width 0.3s ease-in-out;
+  text-align:center;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  align-content: center;
+  font-size: 2.5vh; /* Readable size */
+}
+
+.inactive-btn {
+  background: #888 !important;
+  color: #ccc !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+#logo_sheep-it {
+  margin: auto;
+  width: 10%;
+  align-content: center;
+  flex: 0.3;
+  transform: translateY(-0.5vh);
+}
+
+#logo_IBU {
+  width: 1px;
+  flex: 1;
+}
+
+#folderPath{
+  color:#d86e5a;
+  cursor:pointer;
+  text-decoration:underline;
+  word-break:break-all;
+  display:inline-block;
+  max-width:100%;
+  white-space:normal;
+}

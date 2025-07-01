@@ -1,0 +1,93 @@
+.flex-container {
+  display: flex;
+  width: 100%;
+}
+.left {
+  flex: 1;
+  gap: 50px;
+  padding: 10px;
+  margin-right: 0.5vw;
+  border: 5px solid #3a3a3a;
+  border-radius: 20px;
+}
+.right {
+
+  flex: 12;
+  padding: 10px;
+  border: 5px solid #3a3a3a;
+  border-radius: 20px;
+}
+.center{
+  place-items: center;
+}
+.list{
+  display: grid;
+  width: 100%;
+}
+.modern-button {
+  background-color: #111;              /* Dark, modern base */
+  color: #fff;                         /* White text */                /* Spacing */
+  border: 2px solid #444;             /* Subtle border */
+  border-radius: 5px;                /* Rounded corners */
+  font-size: 1.5vw;                    /* Readable size */
+  font-family: 'Inter', sans-serif;   /* Modern font */
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;   /* Smooth hover */
+}
+
+.modern-button:hover {
+  background-color: #e06150;
+  border-color: #666;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modern-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.modern-button2 {
+  background-color: #111;              /* Dark, modern base */
+  color: #fff;                         /* White text */                /* Spacing */
+  border: 2px solid #444;             /* Subtle border */
+  border-radius: 5px;                /* Rounded corners */
+  font-size: 1.5vw;                    /* Readable size */
+  font-family: 'Inter', sans-serif;   /* Modern font */
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;   /* Smooth hover */
+}
+
+.modern-button2:hover {
+  background-color: #222;
+  border-color: #666;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modern-button2:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+#pointsPieChart.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+#pointsPieChart.fade-in {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+}
+
+#chartSelector {
+  margin-left: 1vw;
+
+}
+
+.strikethrough {
+  text-decoration: line-through;
+  opacity: 0.5;
+}

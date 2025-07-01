@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>I.B.U TEAM DATA</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link rel="shortcut icon" href="#">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='IBU_SMILE_ICON.svg') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='graphs.css') }}">
+</head>
+<body style="background-color:#1A1A1A;">
+  <div class="flex-container">
+    <h2 style=" flex: 9; color:white; font-family:'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; text-align:left; font-size: 2vw;                    /* Readable size */
+  font-family: 'Inter', sans-serif;padding-left:1vw">
+      TEAM DATA VISUALIZATION
+    </h2>
+    <button class="modern-button" style="flex: 1; margin-top: 1vw; height: 6vh; padding-right:1vw" onclick="window.location.href='{{ url_for('index') }}'">Main Page</button>
+  </div>
+  <p style="display:flex; color:white;font-family: 'Inter', sans-serif;font-size: 1.5vw; margin-top:auto; padding-left:1vw">
+  Latest Data Update on {{ latest_date }}
+  </p>
+  <div style="display:flex; text-align: center; margin-bottom: 20px;">
+  <label for="chartSelector" style="color:white;font-family: 'Inter', sans-serif;font-size: 1.5vw; padding-left:1vw">Choose chart:</label>
+  <select id="chartSelector" class="modern-button2">
+    <option value="total">Total</option>
+    <option value="last_week">Last Week</option>
+    <option value="last_month">Last Month</option>
+    <option value="last_year">Last Year</option>
+    <option value="custom">Custom Date</option>
+  </select>
+    <input type="date" id="startDate" style="display: none; margin-left: 10px;" />
+
+    <input type="date" id="endDate" style="display: none; margin-left: 10px;" />
+    <button id="applyCustomRange" class= modern-button style="display:none; margin-left: 10px;">Apply</button>
+  </div>
+  <br>
+    <div class="flex-container">
+      <div class="left list">
+      <button class="modern-button" onclick="window.location.href='{{ url_for('visualization') }}'">Points Data</button>
+      <button class="modern-button">Trends</button>
+      <button class="modern-button">Member Info</button>
+      </div>
+      <div class="right center" >
+      <div id="pointsPieChart" ></div>
+      </div>
+    </div>
+  <script>
+    
+      const chartSelector = document.getElementById("chartSelector");
+      const startDateInput = document.getElementById("startDate");
+      const endDateInput = document.getElementById("endDate");
+      const applyBtn = document.getElementById("applyCustomRange");
+
+    chartSelector.addEventListener("change", () => {
+      const isCustom = chartSelector.value === "custom";
+      startDateInput.style.display = isCustom ? "inline-block" : "none";
+      endDateInput.style.display = isCustom ? "inline-block" : "none";
+      applyBtn.style.display = isCustom ? "inline-block" : "none";
+      Plotly.purge('pointsPieChart'); // Clear the chart before loading new data
+      if (!isCustom) {
+          loadPieChart(chartSelector.value);
+        }
+      });
+
+    applyBtn.addEventListener("click", () => {
+      const from = startDateInput.value;
+      const to = endDateInput.value;
+      console.log ("start: ", startDateInput.value, "end: ", endDateInput.value);
+      if (!from || !to) {
+        alert("Please select both start and end dates.");
+        return;
+      }
+      loadPieChart("custom", from, to);
+    });
+
+    function loadPieChart(type, start = null, end = null) {
+      fetch(`/get_chart_data?type=${type}&start=${start || ""}&end=${end || ""}`)
+        .then(response => {
+          if (!response.ok) {
+            // Try to parse error JSON, or fallback to generic error
+            return response.json().then(err => { throw err; }).catch(() => { throw {error: "Not enough data to display the chart."}; });
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+            return;
+          } else {
+            const trace = Array.isArray(data) ? data[0] : data.data[0];
+            labels.length = 0;
+            dataValues.length = 0;
+            trace.labels.forEach(l => labels.push(l));
+            trace.values.forEach(v => dataValues.push(v));
+            visibilityState = new Array(labels.length).fill(true);
+
+            Plotly.react('pointsPieChart', data);
+            const updatedValues = {{values | tojson }};
+            const plotDiv = document.getElementById("pointsPieChart");
+            // (Re)attach event listeners here
+            plotDiv.on('plotly_legendclick', legendClickHandler);
+            plotDiv.on('plotly_legenddoubleclick', legendDoubleClickHandler);
+            console.log("Data loaded successfully:", data);
+          }
+        })
+        .catch(err => {
+          alert(err.error || "An error occurred while loading the chart data.");
+        });
+    }
+
+    const labels = {{ labels | tojson }};
+    const dataValues = {{ values | tojson }};
+    const hiddenIndices = new Set();
+    const total = dataValues.reduce((sum, value) => sum + value, 0);
+
+    // Copy of values to toggle on legend click
+  let currentValues = [dataValues];
+  let visibilityState = new Array(labels.length).fill(true);
+
+
+    
+    function legendDoubleClickHandler(eventData){
+      // handle double click logic (e.g., isolate this trace)
+      return false; // Prevent default behavior (which isolates this trace)
+    };
+
+    function legendClickHandler(eventData){
+      const chart = document.getElementById("pointsPieChart");
+      const clickedLabel = eventData.label;
+      const clickedIndex = labels.indexOf(clickedLabel);
+
+      // Toggle visibility state
+      visibilityState[clickedIndex] = !visibilityState[clickedIndex];
+
+      // Recalculate visible values
+      let updatedValues = dataValues.map((val, i) => visibilityState[i] ? val : 0);
+
+      // Calculate total of visible values
+      const totalVisible = updatedValues.reduce((sum, v) => sum + v, 0);
+
+      // Generate new text labels with correct percentages
+      const updatedText = updatedValues.map((val, i) => {
+        if (val === 0 || totalVisible === 0) return "";
+        const percent = (val / totalVisible) * 100;
+        return percent >= 0.95 ? `${labels[i]} (${percent.toFixed(1)}%)` : "";
+      });
+
+      // Fade out
+      chart.classList.add("fade-out");
+
+      setTimeout(() => {
+        Plotly.restyle("pointsPieChart", {
+          values: [updatedValues],
+          text: [updatedText]
+        });
+
+        // Update legend label style
+        setTimeout(() => {
+          // Find all legend items
+          const legendItems = document.querySelectorAll('#pointsPieChart .legendtext');
+          legendItems.forEach((item) => {
+            // Get the label text (remove any percentage or extra text)
+            const labelText = item.textContent.split('(')[0].trim();
+            const labelIndex = labels.indexOf(labelText);
+            if (labelIndex !== -1 && !visibilityState[labelIndex]) {
+              item.classList.add('strikethrough');
+            } else {
+              item.classList.remove('strikethrough');
+            }
+          });
+        }, 100);
+
+        // Fade in
+        chart.classList.remove("fade-out");
+        chart.classList.add("fade-in");
+        setTimeout(() => {
+          chart.classList.remove("fade-in");
+        }, 500);
+      }, 600);
+
+      return false; // Prevent default Plotly legend behavior
+    };
+
+  window.onload = function() {
+  const chartSelector = document.getElementById("chartSelector");
+  const startDateInput = document.getElementById("startDate");
+  const endDateInput = document.getElementById("endDate");
+  const applyBtn = document.getElementById("applyCustomRange");
+
+  if (chartSelector.value === "custom") {
+    startDateInput.style.display = "inline-block";
+    endDateInput.style.display = "inline-block";
+    applyBtn.style.display = "inline-block";
+  } else {
+    startDateInput.style.display = "none";
+    endDateInput.style.display = "none";
+    applyBtn.style.display = "none";
+    if (chartSelector.value === "total") {
+      loadPieChart("total");
+    }
+  }
+};
+  </script>
+</body>
+</html>
